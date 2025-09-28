@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}About{% endblock %}
+
+{% block content %}
+{% include "navbar.html" %}
+
+<section id="about" class="about-section py-5">
+  <div class="container">
+    <h2 class="text-center mb-4" 
+        style="color: #333; font-family: 'Arial', sans-serif; font-size: 50px; font-weight: bold; margin-top:0;">
+      🛍️ About ShopyWorld
+    </h2>
+<br><br><br>
+    <p class="text-center mb-5" style="max-width: 800px; margin: auto; font-size: 18px; line-height: 1.8;">
+      Welcome to <strong>ShopyWorld</strong>, your one-stop destination for quality products at the best prices. 
+      Our mission is simple: to make shopping <strong>easy, affordable, and enjoyable</strong> for everyone.
+    </p>
+<br><br>
+<center>
+<div class="col-md-6 text-center">
+    <img src="{% static 'assets/images/about-us.png' %}" 
+         alt="About ShopyWorld" class="img-fluid rounded shadow" style="weight:100%;height:300px">
+  </div></center>
+
+
+    <div class="row align-items-center">
+      <div class="col-md-6">
+        <h4 style="color:#ff6600; font-weight: bold;">Why Choose Us?</h4>
+        <ul style="list-style: none; padding-left: 0; font-size: 16px; line-height: 2;">
+          <li><i class="fa fa-check-circle text-success"></i> User-friendly design for a smooth shopping experience</li>
+          <li><i class="fa fa-check-circle text-success"></i> Secure checkout with multiple payment options</li>
+          <li><i class="fa fa-check-circle text-success"></i> Fast delivery so your order reaches you on time</li>
+          <li><i class="fa fa-check-circle text-success"></i> Dedicated support to help you every step of the way</li>
+        <li><i class="fa fa-check-circle text-success"></i> 24/7 Best Customer Service available</li>
+        <li><i class="fa fa-check-circle text-success"></i> Return policy for damaged products</li>
+
+
+        </ul>
+        <p style="margin-top: 20px; font-size: 16px;">
+          Our vision is to build a community where customers feel confident about every purchase and keep coming back with a smile.
+        </p>
+      </div>      
+    </div>
+<br><br><br>
+    <div class="text-center mt-5">
+      <h4 style="font-weight: bold; color: #333;">Thank you for choosing ShopyWorld</h4>
+      <p style="font-size: 18px; color: #555;">Where shopping meets happiness 💙</p>
+    </div>
+  </div>
+</section>
+
+{% include "footer.html" %}
+{% endblock %}

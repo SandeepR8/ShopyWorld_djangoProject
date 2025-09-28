@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}Profile{% endblock  %}
+
+{% block content %}
+<style>
+center{
+    font-family:Georgia, 'Times New Roman', Times, serif
+}
+.data{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:20px;
+}
+hr{
+    border: none;            /* Remove default border */
+    height: 2px;             /* Thickness */
+    background-color: #333;  /* Color */
+    margin: 20px 0;
+    width:500px;
+}
+h2{
+    margin-bottom:40px;
+}
+</style>
+{% include "navbar.html" %}
+
+<center>
+    
+    
+    <h2>Profile Info</h2>
+
+    <div class='data'>
+    <p><strong>Username:</strong> {{ user.username }}</p>
+    <p><strong>First Name:</strong> {{ user.first_name|default:"Not set" }}</p>
+    <p><strong>Last Name:</strong> {{ user.last_name|default:"Not set" }}</p>
+    <p><strong>Email:</strong> {{ user.email|default:"Not set" }}</p>
+    </div>
+    <hr>
+    <h3>Details</h3>
+    <p><strong>Phone:</strong> {{ profile.phone|default:"No phone number" }}</p>
+    <p><strong>Address 1:</strong> {{ profile.address1|default:"No address" }}</p>
+    <p><strong>Address 2:</strong> {{ profile.address2|default:"-" }}</p>
+    <p><strong>City:</strong> {{ profile.city|default:"Not set" }}</p>
+    <p><strong>State:</strong> {{ profile.state|default:"Not set" }}</p>
+    <p><strong>Zipcode:</strong> {{ profile.zipcode|default:"Not set" }}</p>
+    <p><strong>Country:</strong> {{ profile.country|default:"Not set" }}</p>
+    
+    <a href="{% url 'update_user' %}" class="btn btn-primary">Edit Profile</a>
+    
+    
+</center>
+{% endblock  %}

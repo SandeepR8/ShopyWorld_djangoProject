@@ -1,0 +1,331 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+Home
+{% endblock  %}
+
+{% block content %}
+
+
+{% include "navbar.html" %}
+
+
+{% if messages %}
+<div class="messages">
+  {% for message in messages %}
+    <div class="alert {{ message.tags }}">
+      <span>{{ message }}</span>
+      <button class="close-btn" onclick="this.parentElement.style.display='none';">&times;</button>
+    </div>
+  {% endfor %}
+</div>
+{% endif %}
+{% comment %} <div class="clearfix"></div> {% endcomment %}
+
+</div><!-- /.top-area-->
+
+<header id="home" class="welcome-hero">
+    
+
+    <div id="header-carousel" class="carousel slide carousel-fade" data-ride="carousel">
+        <!--/.carousel-indicator -->
+         <ol class="carousel-indicators">
+            <li data-target="#header-carousel" data-slide-to="0" class="active"><span class="small-circle"></span></li>
+            <li data-target="#header-carousel" data-slide-to="1"><span class="small-circle"></span></li>
+            <li data-target="#header-carousel" data-slide-to="2"><span class="small-circle"></span></li>
+        </ol><!-- /ol-->
+        <!--/.carousel-indicator -->
+
+        <!--/.carousel-inner -->
+        <div class="carousel-inner" role="listbox">
+            <!-- .item -->
+            <div class="item active">
+                <div class="single-slide-item slide1">
+                    <div class="container">
+                        <div class="welcome-hero-content">
+                            <div class="row">
+                                <div class="col-sm-7">
+                                    <div class="single-welcome-hero">
+                                        <div class="welcome-hero-txt">
+                                            <h4>great design collection</h4>
+                                            <h2>cloth covered accent chair</h2>
+                                            <p>
+                                                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiuiana smod tempor  ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip. 
+                                            </p>
+                                            <div class="packages-price">
+                                                <p>
+                                                    $ 399.00
+                                                    <del>$ 499.00</del>
+                                                </p>
+                                            </div>
+                                           
+                                            <button class="btn-cart welcome-add-cart welcome-more-info" onclick="window.location.href='#'">
+                                                more info
+                                            </button>
+                                        </div><!--/.welcome-hero-txt-->
+                                    </div><!--/.single-welcome-hero-->
+                                </div><!--/.col-->
+                                <div class="col-sm-5">
+                                    <div class="single-welcome-hero">
+                                        <div class="welcome-hero-img">
+                                            <img src="{% static 'assets/images/slider/slider1.png' %}" alt="slider image">
+                                        </div><!--/.welcome-hero-txt-->
+                                    </div><!--/.single-welcome-hero-->
+                                </div><!--/.col-->
+                            </div><!--/.row-->
+                        </div><!--/.welcome-hero-content-->
+                    </div><!-- /.container-->
+                </div><!-- /.single-slide-item-->
+
+            </div><!-- /.item .active-->
+
+            <div class="item">
+                <div class="single-slide-item slide2">
+                    <div class="container">
+                        <div class="welcome-hero-content">
+                            <div class="row">
+                                <div class="col-sm-7">
+                                    <div class="single-welcome-hero">
+                                        <div class="welcome-hero-txt">
+                                            <h4>great design collection</h4>
+                                            <h2>mapple wood accent chair</h2>
+                                            <p>
+                                                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiuiana smod tempor  ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip. 
+                                            </p>
+                                            <div class="packages-price">
+                                                <p>
+                                                    $ 199.00
+                                                    <del>$ 299.00</del>
+                                                </p>
+                                            </div>
+                                           
+                                            <button class="btn-cart welcome-add-cart welcome-more-info" onclick="window.location.href='#'">
+                                                more info
+                                            </button>
+                                        </div><!--/.welcome-hero-txt-->
+                                    </div><!--/.single-welcome-hero-->
+                                </div><!--/.col-->
+                                <div class="col-sm-5">
+                                    <div class="single-welcome-hero">
+                                        <div class="welcome-hero-img">
+                                            <img src="{% static 'assets/images/slider/slider2.png' %}" alt="slider image">
+                                        </div><!--/.welcome-hero-txt-->
+                                    </div><!--/.single-welcome-hero-->
+                                </div><!--/.col-->
+                            </div><!--/.row-->
+                        </div><!--/.welcome-hero-content-->
+                    </div><!-- /.container-->
+                </div><!-- /.single-slide-item-->
+
+            </div><!-- /.item .active-->
+
+            <div class="item">
+                <div class="single-slide-item slide3">
+                    <div class="container">
+                        <div class="welcome-hero-content">
+                            <div class="row">
+                                <div class="col-sm-7">
+                                    <div class="single-welcome-hero">
+                                        <div class="welcome-hero-txt">
+                                            <h4>great design collection</h4>
+                                            <h2>valvet accent arm chair</h2>
+                                            <p>
+                                                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiuiana smod tempor  ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip. 
+                                            </p>
+                                            <div class="packages-price">
+                                                <p>
+                                                    $ 299.00
+                                                    <del>$ 399.00</del>
+                                                </p>
+                                            </div>
+                                            
+                                            <button class="btn-cart welcome-add-cart welcome-more-info" onclick="window.location.href='#'">
+                                                more info
+                                            </button>
+                                        </div><!--/.welcome-hero-txt-->
+                                    </div><!--/.single-welcome-hero-->
+                                </div><!--/.col-->
+                                <div class="col-sm-5">
+                                    <div class="single-welcome-hero">
+                                        <div class="welcome-hero-img">
+                                            <img src="{% static 'assets/images/slider/slider3.png' %}" alt="slider image">
+                                        </div><!--/.welcome-hero-txt-->
+                                    </div><!--/.single-welcome-hero-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+
+    </div>
+
+</header>
+
+
+{% comment %} Products section {% endcomment %}
+<section id="new-arrivals" class="new-arrivals">
+    <div class="container">
+        <div class="section-header">
+            <h2>Products</h2>
+        </div><!--/.section-header-->
+        <div class="new-arrivals-content">
+            <div class="row">
+{% if products %}
+                {% for obj in products %}
+                {% if obj.sale %}
+            
+
+                <div class="col-md-3 col-sm-4">
+                    <div class="single-new-arrival">
+                        <div class="single-new-arrival-bg">
+                          <a href="{% url 'product' obj.pk %}">  <img src="{{obj.image.url}}" alt="new-arrivals images"></a>
+                            <div class="single-new-arrival-bg-overlay"></div>
+                            <div class="sale bg-1">
+                                <p>sale</p>
+                            </div>
+                            
+                            
+                            <div class="new-arrival-cart">
+                                <p>
+                                    <span class="lnr lnr-cart"></span>
+                                </p>
+                                <p class="arrival-review pull-right">
+                                    <a href="{% url 'product' obj.pk %}" style="margin-right:10px;">view</a>
+                                </p>
+                            </div>
+                        </div>
+                        <h4><a href="#">{{obj.name}}</a></h4>
+                        
+                        <p class="arrival-product-price"><strike> &#8377; {{obj.price}}</strike> &#8377;{{obj.sale_price}}
+                        <span style='background-color:orange; color:white;'>10% off</span>
+                        </p>
+                    </div>
+                </div>
+
+                {% else %}
+                <div class="col-md-3 col-sm-4">
+                    <div class="single-new-arrival">
+                        <div class="single-new-arrival-bg">
+                           <a href="{% url 'product' obj.pk %}"> <img src="{{obj.image.url}}" alt="new-arrivals images"> </a>
+                            <div class="single-new-arrival-bg-overlay"></div>
+                            
+                            
+                            
+                            <div class="new-arrival-cart">
+                                <p>
+                                    <span class="lnr lnr-cart"></span>
+                                </p>
+                                <p class="arrival-review pull-right">
+                                    <a href="{% url 'product' obj.pk %}" style="margin-right:10px;">view</a>
+                                </p>
+                            </div>
+                        </div>
+                        <h4><a href="#">{{obj.name}}</a></h4>
+                        
+                        <p class="arrival-product-price"> &#8377; {{obj.price}}</p>
+                    </div>
+                </div>
+
+                {% endif %}
+
+                {% endfor %}
+                {% else %}
+                    <p>No products found{% if query %} for "{{ query }}"{% endif %}.</p>
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- clients strat -->
+<section id="clients"  class="clients" style='height:100px'>
+    <div class="container" style='height:100%; text-align:center;'>
+        <a>About info</a>    </div><!--/.container-->
+</section><!--/.clients-->
+
+
+<section id="newsletter"  class="newsletter">
+    <div class="container">
+        <div class="hm-footer-details">
+            <div class="row">
+                <div class=" col-md-3 col-sm-6 col-xs-12">
+                    <div class="hm-footer-widget">
+                        <div class="hm-foot-title">
+                            <h4>information</h4>
+                        </div><!--/.hm-foot-title-->
+                        <div class="hm-foot-menu">
+                            <ul>
+                                <li><a href="{% url "About" %}">about us</a></li><!--/li-
+                                <li><a href="#">contact us</a></li><!--/li-->
+                                <li><a href="#">store</a></li><!--/li-->
+                            </ul><!--/ul-->
+                        </div><!--/.hm-foot-menu-->
+                    </div><!--/.hm-footer-widget-->
+                </div><!--/.col-->
+                <div class=" col-md-3 col-sm-6 col-xs-12">
+                    <div class="hm-footer-widget">
+                        <div class="hm-foot-title">
+                            <h4>collections</h4>
+                        </div><!--/.hm-foot-title-->
+                        <div class="hm-foot-menu">
+                            <ul>
+                                <li><a href="#">wooden chair</a></li><!--/li-->
+                                <li><a href="#">royal cloth sofa</a></li><!--/li-->
+                                <li><a href="#">accent chair</a></li><!--/li-->
+                                <li><a href="#">bed</a></li><!--/li-->
+                                <li><a href="#">hanging lamp</a></li><!--/li-->
+                            </ul><!--/ul-->
+                        </div><!--/.hm-foot-menu-->
+                    </div><!--/.hm-footer-widget-->
+                </div><!--/.col-->
+                <div class=" col-md-3 col-sm-6 col-xs-12">
+                    <div class="hm-footer-widget">
+                        <div class="hm-foot-title">
+                            <h4>my accounts</h4>
+                        </div><!--/.hm-foot-title-->
+                        <div class="hm-foot-menu">
+                            <ul>
+                                <li><a href="#">my account</a></li><!--/li-->
+                                <li><a href="#">wishlist</a></li><!--/li-->
+                                <li><a href="#">order history</a></li><!--/li-->
+                                <li><a href="#">my cart</a></li><!--/li-->
+                            </ul><!--/ul-->
+                        </div><!--/.hm-foot-menu-->
+                    </div><!--/.hm-footer-widget-->
+                </div><!--/.col-->
+                <div class=" col-md-3 col-sm-6  col-xs-12">
+                    <div class="hm-footer-widget">
+                        <div class="hm-foot-title">
+                            <h4>newsletter</h4>
+                        </div><!--/.hm-foot-title-->
+                        <div class="hm-foot-para">
+                            <p>
+                                Subscribe  to get latest news,update and information.
+                            </p>
+                        </div><!--/.hm-foot-para-->
+                        <div class="hm-foot-email">
+                            <div class="foot-email-box">
+                                <input type="text" class="form-control" placeholder="Enter Email Here....">
+                            </div><!--/.foot-email-box-->
+                            <div class="foot-email-subscribe">
+                                <span><i class="fa fa-location-arrow"></i></span>
+                            </div><!--/.foot-email-icon-->
+                        </div><!--/.hm-foot-email-->
+                    </div><!--/.hm-footer-widget-->
+                </div><!--/.col-->
+            </div><!--/.row-->
+        </div><!--/.hm-footer-details-->
+
+    </div><!--/.container-->
+
+</section><!--/newsletter-->	
+{% include "footer.html" %}
+
+
+{% endblock %}

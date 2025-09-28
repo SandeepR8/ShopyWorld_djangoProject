@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}Categories{% endblock  %}
+
+{% block content %}
+{% include "navbar.html" %}
+<center>
+<div>
+    <div>
+        {% for category in categories %}
+            <ul>
+                <li><a href='#'>{{category.name}}</a></li>
+            </ul>        
+        {% endfor %}
+    </div>
+</div>
+</center>
+
+{% endblock  %}

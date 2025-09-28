@@ -1,0 +1,243 @@
+{% extends "base.html" %}
+{% block title %}Cart{% endblock title %}
+{% block content %}
+{% include "navbar.html" %}
+
+<style>
+.cart-container { width:100%; max-width:900px; margin:30px auto; display:flex; flex-direction:column; gap:20px; }
+.cart-item { display:flex; align-items:center; background:#fafafa; border-radius:8px; padding:16px; box-shadow:0 2px 6px rgba(0,0,0,0.08); gap:20px; }
+.cart-img { width:100px; height:100px; object-fit:cover; border-radius:6px; }
+.cart-info { flex:2; display:flex; flex-direction:column; gap:8px; }
+.cart-name { font-size:1.1rem; font-weight:bolder; }
+.cart-description { font-size:1rem; font-weight:500; }
+.cart-price { color:#b76e79; font-size:1.15rem; font-weight:bold; }
+.cart-quantity { display:inline-flex; align-items:center; gap:5px; border:1px solid #e5e5e5; border-radius:6px; padding:2px 4px; width:90px; }
+.qty-btn { background:none; border:none; font-size:1.2em; padding:2px; cursor:pointer; color:#333; margin-left:5px; }
+.qty-num { margin:0 3px; min-width:20px; text-align:center; font-weight:500; }
+.update-btn { background:#0bda42; padding:5px 4px; border-radius:4px; color:white; margin-left:10px; cursor:pointer;width; }
+.cart-btn { margin-left:10px; padding:8px 18px; border:none; border-radius:6px; font-weight:500; cursor:pointer; transition:background .2s; }
+.buy-btn { background:goldenrod; color:#fff; }
+.remove-btn { background:#25ecf0; color:#fff; }
+.qty-btn:hover,.update-btn:hover,.cart-btn:hover{ opacity:0.8; }
+.subtotal-card {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #fff;
+  box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+  padding: 15px 30px;
+  font-family: 'Arial', sans-serif;
+  display: flex;
+  flex-direction: column;
+  max-width: 500px;
+  margin: 0 auto;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  z-index: 1000;
+}
+
+.subtotal-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 16px;
+  margin: 5px 0;
+}
+
+.subtotal-row.total {
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.label {
+  color: #555;
+}
+
+.value {
+  color: #111;
+}
+
+.subtotal-divider {
+  border-top: 1.5px solid #ddd;
+  margin: 8px 0;
+}
+</style>
+
+
+<div class="cart-container">
+  {% if messages %}
+<div class="messages">
+  {% for message in messages %}
+    <div class="alert {{ message.tags }}">
+      <span>{{ message }}</span>
+      <button class="close-btn" onclick="this.parentElement.style.display='none';">&times;</button>
+    </div>
+  {% endfor %}
+</div>
+{% endif %}
+{% for item in cart_products %}
+  {% with product=item.product quantity=item.quantity %}
+    <div class="cart-item" id="cart-item-{{ product.id }}">
+      <img src="{{ product.image.url }}" alt="Product" class="cart-img">
+      <div class="cart-info">
+        <div class="cart-name">{{ product.name }}</div>
+        <div class="cart-description">{{ product.description }}</div>
+
+        {% if product.sale %}
+          <div class="cart-price">
+            <strike>{{ product.price }}</strike> 
+            <span style='background:rgba(136,3,3,0.7);color:white;'>10% off</span>
+          </div>
+          <div class="cart-price">{{ product.sale_price }}</div>
+        {% else %}
+          <div class="cart-price">{{ product.price }}</div>
+        {% endif %}
+        <div class="cart-quantity">
+          <button class="qty-btn minus-btn" data-product="{{ product.id }}">&minus;</button>
+           <span class="qty-num" id="qty{{product.id}}" data-value="{{ quantity }}">{{ quantity}}</span> 
+          <button class="qty-btn plus-btn" data-product="{{ product.id }}">&plus;</button>
+          <button class=" cart-btn update-btn update-cart" data-product="{{ product.id }}" data-index="{{ product.id }}">Update</button>
+
+        </div>
+
+
+      </div>
+      <button class="cart-btn buy-btn">Buy</button>
+      <button class="cart-btn remove-btn delete-product" data-index="{{ product.id }}">Delete</button>
+    </div>
+  {% endwith %}
+{% empty %}
+<center>
+  <p>Your Cart is empty</p>
+  <p>Click here to  <a href="{% url 'Home' %}">Shop now</a></p>
+</center>
+  {% endfor %}
+<div class="subtotal-card">
+  {% comment %} <div class="subtotal-row">
+    <span class="label">Items Price:</span>
+    <span class="value" id="items-price"> &#8377;{{totals}}</span>
+  </div>
+
+  <div class="subtotal-row">
+    <span class="label">Delivery Charges:</span>
+    <span class="value" id="delivery-charges">&#8377; 30.00</span>
+  </div> {% endcomment %}
+
+  {% comment %} <div class="subtotal-divider"></div> {% endcomment %}
+
+  <div class="subtotal-row total">
+    <span class="label">Total Amount:</span>
+    {% if totals == 0 %}
+    <span class="value" id="total-amount">&#8377; 0</span>
+
+    {% else %}
+    <span class="value" id="total-amount">&#8377; {{totals}}</span>
+    {% endif %}
+  </div>
+  <a href='{% url "checkout" %}' style="
+    width:100%;background:green;text-align:center;color:white;border-radius:5px;
+  ">Checkout</a>
+
+  
+</div>
+</div>
+
+
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+<script>
+  //quantity changing buttons 
+  $(document).ready(function(){
+
+// When plus button is clicked
+$(".plus-btn").click(function(){
+    let productId = $(this).data("product"); // get product id
+    let qtyElement = $("#qty" + productId);  // select span by id
+    let currentQty = parseInt(qtyElement.text()); // current value
+    qtyElement.text(currentQty + 1); // increase
+});
+
+// When minus button is clicked
+$(".minus-btn").click(function(){
+    let productId = $(this).data("product");
+    let qtyElement = $("#qty" + productId);
+    let currentQty = parseInt(qtyElement.text());
+    if(currentQty > 1){ // prevent going below 1
+        qtyElement.text(currentQty - 1);
+    }
+});
+
+});
+
+
+  // Update Cart
+  $(document).on('click', '.update-cart', function(e){
+      e.preventDefault();
+      // grab the product id
+      var productid = $(this).data('index');
+  
+      $.ajax({
+      type: 'POST',
+      url: "{% url 'cart_update' %}",
+      data: {
+        product_id: $(this).data('index'),
+        product_qty: $('#qty'+ productid ).text(),
+        csrfmiddlewaretoken: '{{ csrf_token }}',
+        action: 'post'
+      },
+      success: function(json){
+          //console.log(json)
+          //document.getElementById("cart_quantity").textContent = json.qty
+          location.reload();
+      },
+  
+      error: function(xhr, errmsg, err){
+        console.log(err);
+        
+  
+      }
+  
+  
+      });
+  
+  })
+
+ 
+
+  // Delete Item From Cart
+  $(document).on('click', '.delete-product', function(e){
+      e.preventDefault();
+      // grab the product id
+      var productid = $(this).data('index');
+  
+      $.ajax({
+      type: 'POST',
+      url: "{% url 'cart_delete' %}",
+      data: {
+        product_id: productid,
+        csrfmiddlewaretoken: '{{ csrf_token }}',
+        action: 'post'
+      },
+      success: function(json){
+          //console.log(json)
+          //document.getElementById("cart_quantity").textContent = json.qty
+          location.reload();
+      },
+  
+      error: function(xhr, errmsg, err){
+        console.log(errmsg)
+  
+      }
+  
+  
+      });
+  
+  })
+  
+  
+  
+  
+  </script>
+
+{% endblock %}

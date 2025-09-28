@@ -1,0 +1,172 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<style>
+  /* Chrome, Safari, Edge, Opera */
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+.message{
+  position: relative;
+  background-color:green;
+  width: 100%;
+  height: 40px;
+}
+
+
+</style>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"
+  integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+  crossorigin="anonymous"></script>
+
+{% include "navbar.html" %}
+
+
+<main class="main">
+  <!-- Page Title -->
+  <div class="page-title light-background">
+    <div class="container d-lg-flex justify-content-between align-items-center">
+      <h1 class="mb-2 mb-lg-0">Product Details</h1>
+      <nav class="breadcrumbs">
+        <ol>
+          <li><a href="{% url 'Home' %}">Home</a></li>
+          <li class="current">Product Details</li>
+        </ol>
+      </nav>
+    </div>
+  </div><!-- End Page Title -->
+  
+{% if messages %}
+<div class="messages">
+  {% for message in messages %}
+    <div class="alert {{ message.tags }}">
+      <span>{{ message }}</span>
+      <button class="close-btn" onclick="this.parentElement.style.display='none';">&times;</button>
+    </div>
+  {% endfor %}
+</div>
+{% endif %}
+
+  <section id="product-details" class="product-details section">
+    <div class="container" data-aos="fade-up" data-aos-delay="100">
+      <div class="row g-4">
+        <!-- Product Gallery -->
+        <div class="col-lg-7" data-aos="zoom-in" data-aos-delay="150">
+          <div class="product-gallery">
+            <div class="main-showcase">
+              <div class="image-zoom-container">
+                <img src="{{ product.image.url }}" alt="{{ product.name }}"
+                  class="img-fluid main-product-image">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product Details -->
+        <div class="col-lg-5" data-aos="fade-left" data-aos-delay="200">
+          <div class="product-details">
+            <h1 class="product-name">{{ product.name }}</h1>
+
+            <div class="pricing-section">
+              <div class="price-display">
+                <span class="sale-price">{{ product.price }}</span>
+              </div>
+            </div>
+
+            <div class="product-description">
+              <p>{{ product.description }}</p>
+            </div>
+
+            <!-- Purchase Options -->
+            <div class="purchase-section">
+              <div class="quantity-control">
+                <label for="quantity">Quantity:</label>
+                <div style="border:solid 1px; border-radius: 5px;padding: 2px 2px; display: flex;gap: 10px;">
+                <button class='minus-btn' onclick="minus()">&minus;</button>
+                <input type="number" id="quantity" name="quantity" value="1" min="1" max="18" style="border:none;width:20px;margin-left:5px">
+                <button class='plus-btn'onclick='plus()'>&plus;</button></div>
+              </div>
+
+
+              {% if user.is_authenticated %}
+              <div class="action-buttons">
+                <!-- Add product id as data attribute -->
+                <button class="btn primary-action" id="add-cart" value="{{ product.id }}"
+                  type="button">
+                  <i class="bi bi-bag-plus"></i>
+                  Add to Cart
+                </button>
+              </div>
+              {% else %}
+              <div class="action-buttons">
+                <a href="{% url 'login' %}" class="btn primary-action">
+                  <i class="bi bi-bag-plus"></i> Login to Add
+                </a>
+              </div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script src="{% static 'assets/js/main.js' %}"></script>
+
+<script>
+  // Check if button pressed
+  $(document).on('click', '#add-cart', function(e){
+      e.preventDefault();
+      $.ajax({
+          type: 'POST',
+          url: "{% url 'cart_add' %}",
+          data: {
+      product_id: $('#add-cart').val(),
+      product_qty: $('#quantity').val(),
+      csrfmiddlewaretoken: '{{ csrf_token }}',
+      action: 'post'
+          },
+  
+          success: function(json){
+              console.log(json)
+              $("#cart_quantity").text(json.cart_length);
+
+              document.getElementById("cart_quantity").textContent = json.qty
+              location.reload(); 
+          },
+  
+          error: function(xhr, errmsg, err){
+  
+          } 
+      });
+  })
+
+//Quatity changing using buttons
+//increamenting using plus
+function plus(){
+  const qty=document.querySelector('#quantity');
+  if(qty.value < 18){
+    qty.value=Number(qty.value)+1;
+}}
+
+//decrementing using minus
+function minus(){
+  const qty=document.querySelector('#quantity');
+  if (qty.value > 1){
+    qty.value-=1
+}}
+
+
+
+  </script>
+{% endblock %}

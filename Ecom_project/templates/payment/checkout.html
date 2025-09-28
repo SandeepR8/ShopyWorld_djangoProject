@@ -1,0 +1,184 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+
+{% block title %}Checkout{% endblock  %}
+
+{% block content %}
+<style>
+    .order-totals {
+        margin-top: 20px;
+        padding: 15px;
+        border-top: 1px solid #ddd;
+        font-size: 16px;
+      }
+      
+      .order-totals div {
+        display: flex;
+        justify-content: space-between; /* Title left, value right */
+        margin-bottom: 8px;
+      }
+      
+      .order-totals span:first-child {
+        font-weight: 500; /* title */
+        color: #333;
+      }
+      
+      .order-totals span:last-child {
+        font-weight: 600; /* value */
+        color: #000;
+      }
+      
+      .order-total {
+        border-top: 2px solid #333;
+        padding-top: 10px;
+        font-size: 18px;
+        font-weight: bold;
+      }
+      .btn-continue{
+        background:black;
+        color:white;
+        text-align:center;
+        width:100%;
+        padding:10px 20px;
+        margin-top:40px;
+        border-radius:10px;
+        transition:0.3 ease-in-out;
+      }
+      .btn-continue:hover{
+        opacity:0.8;
+      }
+      .btn-continue:active{
+        opacity:0.6;
+      }
+      .checkout-container {
+        background-color: #ffffff; /* White background */
+        padding: 20px;             /* Space inside the form */
+        border-radius: 10px;       /* Rounded corners */
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15); /* Even shadow on all sides */
+    }
+    .checkout-container .form-control {
+      margin-bottom: 15px; /* space between input fields */
+  }
+  .heading{
+    font-size:13px;
+    font-weight:bold;
+  }
+ 
+      
+</style>
+
+
+
+{% include "navbar.html" %}
+
+
+
+
+<main class="main">
+
+    <!-- Page Title -->
+    <div class="page-title light-background">
+      <div class="container d-lg-flex justify-content-between align-items-center">
+        <h1 class="mb-2 mb-lg-0">Checkout</h1>
+        <nav class="breadcrumbs">
+          <ol>
+            <li><a href="{% url 'cart_summary' %}">Back</a></li>
+            <li class="current">Checkout</li>
+          </ol>
+        </nav>
+      </div>
+    </div><!-- End Page Title -->
+    
+    <!-- Checkout Section -->
+    <section id="checkout" class="checkout section">
+
+      <div class="container">
+
+        <div class="row">
+          <div class="col-lg-7">
+            <!-- Checkout Form -->
+            <div class="checkout-container">
+              <h3 class='heading'>Shipping Address</h3><hr>
+              
+             <form method='POST' action='{% url "checkout" %}'>
+              {% csrf_token %}
+              {{form|crispy}}
+              <button type='submit' class='btn-continue'>Continue to Payment</button>
+
+             </form>
+              
+                  </div>
+                </div>
+
+
+          <div class="col-lg-5">
+            <!-- Order Summary -->
+            <div class="order-summary" data-aos="fade-left" data-aos-delay="200">
+              <div class="order-summary-header">
+                <h3>Order Summary</h3>
+              </div>
+          
+              <div class="order-summary-content">
+                <div class="order-items">
+                  {% for item in cart_products %}
+                    {% with product=item.product quantity=item.quantity %}
+                    <div class="order-item">
+                      <div class="order-item-image">
+                        <img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-fluid">
+                      </div>
+                      <div class="order-item-details">
+                        <h4>{{ product.name }}</h4>
+                        <div class="order-item-price">
+                          <span class="quantity">{{ quantity }} ×</span>
+                          <span class="price">&#8377;{{ product.price }}</span>
+                        </div>
+                      </div>
+                    </div>
+                    {% endwith %}
+                  {% empty %}
+                    <center>
+                      <p>No items to checkout</p>
+                      <p>Click here to <a href="{% url 'Home' %}">Shop now</a></p>
+                    </center>
+                  {% endfor %}
+                </div>
+          
+                <!-- Totals -->
+                <div class="order-totals">
+                  <div class="order-subtotal d-flex justify-content-between">
+                    <span>Subtotal</span>
+                    <span>&#8377;{{ totals }}</span>
+                  </div>
+                  <div class="order-shipping d-flex justify-content-between">
+                    <span>Shipping</span>
+                    <span>&#8377;30</span>
+                  </div>
+                  <div class="order-tax d-flex justify-content-between">
+                    <span>Tax</span>
+                    <span>&#8377;21.00</span>
+                  </div>
+                  <div class="order-total d-flex justify-content-between">
+                    <span>Total</span>
+                    <span>&#8377;{{ totals|add:30|add:21 }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+
+        
+
+      </div>
+
+    </section><!-- /Checkout Section -->
+
+  </main>
+
+
+
+
+
+{% include "footer.html" %}
+{% endblock  %}

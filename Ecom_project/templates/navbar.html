@@ -1,0 +1,105 @@
+  {% load static %}
+  <!-- top-area Start -->
+  <div class="top-area">
+    <div class="header-area">
+        <!-- Start Navigation -->
+        <nav class="navbar navbar-default bootsnav  navbar-sticky navbar-scrollspy"  data-minus-value-desktop="70" data-minus-value-mobile="55" data-speed="1000">
+
+            <!-- Start Top Search -->
+            <div class="top-search {% if query %}active{% endif %}">
+                <div class="container">
+                    <form method="get" action="{% url 'Home' %}">
+                        <div class="input-group">
+
+                            <input type="text" class="form-control search-box"
+                                   placeholder="Search" 
+                                   name="search" 
+                                   value="{{ query }}"
+                                   style='width:80%'>
+                                   <button type="submit" style='margin-top:10px'><span class='input-group-addon'><i class="fa fa-search"></i></span></button>                                   
+                           <span class="input-group-addon close-search"><i class="fa fa-times"></i></span>
+
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+                  
+
+<div class="container">            
+<!-- Start Atribute Navigation -->
+<div class="attr-nav">
+    <ul>
+{% comment %} Search Icon {% endcomment %}
+        <li class="search">
+            <a href="#"><span class="lnr lnr-magnifier"></span></a>
+        </li><!--/.search-->
+        
+
+{% comment %} cart Icon {% endcomment %}
+
+        <li class="dropdown">
+            <a href="{% url 'cart_summary' %}" class="dropdown-toggle" data-toggle="dropdown" >
+                <span class="lnr lnr-cart"></span>
+                <span class="badge badge-bg-1" id="cart_quantity">{{ cart_len }}</span>
+            </a>
+          
+            
+        </li>
+
+{% comment %} Profile Icon {% endcomment %}
+        <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            <img src="{% static 'assets/images/profile_img.png' %}" 
+                alt="Profile" width="25" height="25" 
+                style="border-radius: 50%; margin-bottom: 4px;">
+            </a>
+        
+            <ul class="dropdown-menu">
+            {% if user.is_authenticated %}
+                <li class="dropdown-header text-center">
+                <img src="{% static 'assets/images/profile_icon.png' %}" 
+                    alt="Profile" width="60" height="60" 
+                    style="border-radius: 50%; margin-bottom: 5px;">
+                <p style="margin: 0; font-weight: bold;">{{ user.username }}</p>
+                </li>
+                <li role="separator" class="divider"></li>
+                <li><a href="{% url 'userprofile' %}"><i class="fa fa-user" style="margin-right:10px"></i> My Profile</a></li>
+                <li><a href="{% url 'password_change' %}"><i class="fa fa-key" style="margin-right:10px"></i> Change Password</a></li>
+                <li><a href="{% url 'logout' %}"><i class="fa fa-sign-out" style="margin-right:10px"></i> Logout</a></li>
+            {% else %}
+                <li><a href="{% url 'login' %}"><i class="fa fa-sign-in"></i> Login</a></li>
+                <li><a href="{% url 'register' %}"><i class="fa fa-user-plus"></i> Register</a></li>
+            {% endif %}
+            </ul>
+        </li>
+  
+    </ul>
+</div><!--/.attr-nav-->
+<!-- End Atribute Navigation -->
+
+<!-- Start Header Navigation -->
+<div class="navbar-header">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-menu">
+        <i class="fa fa-bars"></i>
+    </button>
+    <a class="navbar-brand" href="#home"><span class='log-name'>Shopy</span>World</a>
+
+</div><!--/.navbar-header-->
+
+<!-- Collect the nav links, forms, and other content for toggling -->
+<div class="collapse navbar-collapse menu-ui-design" id="navbar-menu">
+    <ul class="nav navbar-nav navbar-center" data-in="fadeInDown" data-out="fadeOutUp">
+        <li><a href="{% url 'Home' %}">home</a></li>
+        <li><a href="{% url 'About' %}">About Us</a></li>
+
+        <li class="scroll"><a href="#new-arrivals">new arrival</a></li>
+
+        <li class="scroll"><a href="#footer">contact</a></li>
+        <li><a href="{% url 'Category' %}">Categories</a></li>
+
+    </ul><!--/.nav -->
+</div><!-- /.navbar-collapse -->
+</div><!--/.container-->
+</nav><!--/nav-->
+<!-- End Navigation -->
