@@ -14,6 +14,7 @@ from .forms import ProfileForm
 from django.db.models import Q
 import json
 from cart.cart import Cart
+import random
 
 
 def Home(request):
@@ -43,6 +44,32 @@ def about(request):
 def Categories(request):
     categories=Category.objects.all()
     return render(request,'core/category.html',{'categories':categories})
+
+
+def Verify_otp(request):
+    return render(request,'registration/otp_verification.html')
+
+def ForgetPassword(request):
+    if request.method =='POST':
+        email = request.POST.get('email')
+        if User.objects.filter(email = email).exists():
+            user=User.objects.get(email=email)
+            otp=random.randint(100000,999999)
+            subject = "Your OTP for Verification- ShopyWorld"
+            message = f'Hi User! \n \n Your OTP is :{otp} \n\n This OTP is valid for 5 minutes.'
+            email_from = settings.DEFAULT_FROM_EMAIL
+            recipient_list = [email]
+            send_mail(subject, message, email_from, recipient_list)
+            messages.success(request,'OTP Sent to mail')
+            return render(request,'registration/otp_verification.html',{'user':user})
+
+            
+
+    
+        else:
+            messages.error(request,'Email is not registered.')
+
+    return render(request,'registration/Forgetpassword.html')
 
 def PasswordChange(request):
     if request.user.is_authenticated:

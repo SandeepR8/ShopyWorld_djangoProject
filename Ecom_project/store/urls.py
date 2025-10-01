@@ -13,5 +13,7 @@ urlpatterns = [
     path('product/<int:pk>',views.specific_product,name='product'),
     path('categories/',views.Categories,name='Category'),
     path('change_password/',views.PasswordChange,name='password_change'),
+    path('Forget_password/',views.ForgetPassword,name='forget_password'),
+    path('OTP_verfication',views.Verify_otp,name="OTP"),
 
 ]

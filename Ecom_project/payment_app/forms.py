@@ -39,3 +39,17 @@ class ShippingAddressForm(forms.ModelForm):
                 ("TH", "Thailand"),
             ]),
         }
+
+
+
+class BillingForm(forms.Form):
+    billing_full_name = forms.CharField(label="",widget=forms.TextInput(attrs={'placeholder':'Full Name'})) 
+    billing_email = forms.CharField(label="",widget=forms.TextInput(attrs={'placeholder':'Email'}))
+    billing_phone = forms.CharField(label="",widget=forms.TextInput(attrs={'placeholder':'Phone'}))
+    billing_Address1 = forms.CharField(label="",widget=forms.TextInput(attrs={'placeholder':'Address1'}))
+    billing_Address2 = forms.CharField(label="",widget=forms.TextInput(attrs={'placeholder':'Address2 (optional)'}),required=False)
+    billing_city = forms.CharField(label="",widget=forms.TextInput(attrs={'placeholder':'City'}))
+    billing_state = forms.CharField(label="",widget=forms.TextInput(attrs={'placeholder':'State'}),required=False)
+    billing_zipcode = forms.CharField(label="",widget=forms.TextInput(attrs={'placeholder':'Zip Code'}),required=False)
+    billing_country = forms.CharField(label="",widget=forms.TextInput(attrs={'placeholder':'Country'}))
+    

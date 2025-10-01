@@ -1,7 +1,25 @@
 from django.contrib import admin
 from .models import ShippingAddress,Order,OrderItem
+from django.contrib.auth.models import User
+
 
 
 admin.site.register(ShippingAddress)
 admin.site.register(Order)
 admin.site.register(OrderItem)
+
+# inlining order and orderitem 
+class OrderItemline(admin.StackedInline):
+    model = OrderItem
+    extra = 0
+
+class OrderAdmin(admin.ModelAdmin):
+    model = Order
+    readonly_fields = ('date_ordered',)
+    inlines = [OrderItemline,]
+
+# unregistering the order model and re-registering again 
+
+admin.site.unregister(Order)
+
+admin.site.register(Order,OrderAdmin)
