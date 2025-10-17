@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+{% block title %}shipped{% endblock %}
+
+{% block content %}
+{% include "navbar.html" %}
+<style>
+   .card {
+      padding-top: 10px;
+      padding-bottom: 10px;
+      border-radius: 10px;
+      font-size: 20px;
+      display: flex;
+      justify-content: start;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .button {
+      background-color: #ccc;
+      width: 60px;
+      height: 30px;
+      border-radius: 50px;
+      position: relative;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .button::before {
+      content: '';
+      position: absolute;
+      width: 24px;
+      height: 24px;
+      background-color: white;
+      border-radius: 50%;
+      top: 3px;
+      left: 3px;
+      transition: transform 0.3s ease;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+
+    input {
+      display: none;
+    }
+
+    input:checked + .button {
+      background-color: #20096d;
+    }
+
+    input:checked + .button::before {
+      transform: translateX(30px);
+    }
+    span{
+      margin-top: 0;
+      margin-bottom: 14px;
+    }
+    .save-btn{
+      background: rgba(4, 4, 230, 0.719);
+      padding: 5px 10px;
+      color: white;
+      border: none;
+      border-radius: 10%;
+      transition:0.3s ease-in-out;
+    }
+    .save-btn:hover{
+      opacity:0.8;
+    }
+    .save-btn:active{
+      opacity: 0.6;
+    }
+
+</style>
+
+
+<section id="about" class="about-section py-5">
+  <div class="container">
+    <h2 class="text-center mb-4" 
+        style="color: #333; font-family: 'Arial', sans-serif; font-size: 50px; font-weight: bold; margin-top:0;">
+        Order Items
+    </h2>
+<br>
+{{order}}
+<div class="container-con">
+  <div> 
+    <p style='text-align:end;'>Ordered-date : {{order.date_ordered}}</p>
+    <p style='text-align:end;'>Shipped-date : {{order.date_shipped}}</p>
+
+
+    <h3>User : {{order.user}}</h3>
+    <p>Full Name : {{order.full_name}}</p>
+    <p>Email : {{order.email}}</p>
+    <p>Total Amount : {{order.amount_pay}}</p>
+    <p>Total Amount : {{order.shipped}}</p>
+
+    
+    <div class="card"><span>Shipped Status :</span>
+      <form method="POST" action="{% url "orders" order.id %}">
+        {% csrf_token %}
+        {% if order.shipped %}
+        <input type="checkbox" id="check" checked disabled>  
+        <label for="check" class="button"></label>
+
+
+        {% else %}
+       <input type="checkbox" id="check" value='shipped' name="checkbox">
+      <label for="check" class="button"></label>
+      <button type="submit" class="save-btn">save</button>
+      {% endif %}
+
+    </form>
+    </div>
+    <pre>{{order.Shipping_Address}}</pre>
+    
+  </div>
+  <div>
+    <h4 style='margin-top:20px;margin-bottom:20px;'>Ordered Product Details</h4>
+
+    {% for items in order_items %}
+    <div style='
+    display:flex;
+    align-items:center;
+    justify-content:start;
+    gap:15px;
+    '>
+    <strong>{{items.product.name}}..  -</strong>
+    <p>{{items.quantity}} x {{items.price}}</p>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+
+</section>
+
+
+
+{% include "footer.html" %}
+{% endblock %}

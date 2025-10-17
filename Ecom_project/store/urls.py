@@ -15,5 +15,6 @@ urlpatterns = [
     path('change_password/',views.PasswordChange,name='password_change'),
     path('Forget_password/',views.ForgetPassword,name='forget_password'),
     path('OTP_verfication',views.Verify_otp,name="OTP"),
+    path('users_details/',views.User_details,name='user_details'),
 
 ]

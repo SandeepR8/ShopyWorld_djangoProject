@@ -6,16 +6,40 @@ from .forms import ShippingAddressForm,BillingForm
 from django.contrib.auth.models import User
 from django.contrib import messages
 from decimal import Decimal
-from store.models import Product
+from store.models import Product,CustomerProfile
 def payment_success(request):
     return render(request,'payment/payment_success.html')
 
 
+def Order_status(request):
+    orders = Order.objects.filter(user=request.user)
+    ordered_items = OrderItem.objects.filter(user = request.user)
+    return render(request,'payment/order_placed.html',{'orders':orders,'ordered_items':ordered_items})
+
+def orders(request,pk):
+    orders = Order.objects.get(id=pk)
+    order_items = OrderItem.objects.filter(order=pk)
+    if request.method == 'POST':
+        if 'checkbox' in request.POST:
+            orders.shipped = True
+            orders.save()
+
+        
+    return render(request,'payment/orders.html',{'order':orders,'order_items':order_items})
+
+
 def shipped_dash(request):
-    pass
+    if request.user.is_authenticated and request.user.is_superuser:
+        order=Order.objects.filter(shipped=True)
+        return render(request,'payment/shipped.html',{'obj':order})
 
 def not_shipped_dash(request):
-    pass
+    if request.user.is_authenticated and request.user.is_superuser:
+        order=Order.objects.filter(shipped=False)
+        return render(request,'payment/not_shipped.html',{'obj':order})
+    
+
+
 
 @login_required
 def checkout(request):
@@ -88,6 +112,11 @@ def process_order(request):
             if key == "cart":
                 del request.session[key]
 
+        #deleting the old_cart field in custom profile model
+        current_user = CustomerProfile.objects.filter(user__id = request.user.id)
+        current_user.update(old_cart = "")
+
+
         messages.success(request,'Order placed!')
         return redirect('Home')
     
@@ -109,6 +138,9 @@ def process_order(request):
         for key in list(request.session.keys()):
             if key == "cart":
                 del request.session[key]
+        
+        current_user = CustomerProfile.objects.filter(user__id = request.user.id)
+        current_user.update(old_cart = "")
 
 
         messages.success(request,'Order placed!')

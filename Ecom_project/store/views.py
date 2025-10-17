@@ -34,6 +34,10 @@ def Home(request):
     })
 
 
+def User_details(request):
+    user=User.objects.all()
+    return render(request,'core/user_details.html',{'users':user})
+
 def specific_product(request,pk):
     product=get_object_or_404(Product,pk=pk)
     return render(request,'core/specific_product.html',{'product':product})
@@ -52,22 +56,22 @@ def Verify_otp(request):
 def ForgetPassword(request):
     if request.method =='POST':
         email = request.POST.get('email')
-        if User.objects.filter(email = email).exists():
-            user=User.objects.get(email=email)
-            otp=random.randint(100000,999999)
-            subject = "Your OTP for Verification- ShopyWorld"
-            message = f'Hi User! \n \n Your OTP is :{otp} \n\n This OTP is valid for 5 minutes.'
-            email_from = settings.DEFAULT_FROM_EMAIL
-            recipient_list = [email]
-            send_mail(subject, message, email_from, recipient_list)
-            messages.success(request,'OTP Sent to mail')
-            return render(request,'registration/otp_verification.html',{'user':user})
+        if email:
+            if User.objects.filter(email = email).exists():
+                user=User.objects.get(email=email)
+                otp=random.randint(100000,999999)
+                subject = "Your OTP for Verification- ShopyWorld"
+                message = f'Hi User! \n \n Your OTP is :{otp} \n\n This OTP is valid for 5 minutes.'
+                email_from = settings.DEFAULT_FROM_EMAIL
+                recipient_list = [email]
+                send_mail(subject, message, email_from, recipient_list)
+                messages.success(request,'OTP Sent to mail')
+                return render(request,'registration/otp_verification.html',{'user':user})
+            else:
+                messages.error(request,'Email is not registered.')
 
-            
-
-    
         else:
-            messages.error(request,'Email is not registered.')
+            messages.error(request,'Email field is empty')
 
     return render(request,'registration/Forgetpassword.html')
 

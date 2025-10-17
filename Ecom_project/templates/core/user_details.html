@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block title %}shipped{% endblock %}
+
+{% block content %}
+{% include "navbar.html" %}
+<style>
+    table{
+        width: 100%;
+    }
+
+
+    th,td{
+        text-align: center;
+    }
+    table,th,td{
+        border: 3px solid;
+    }
+    td{
+        padding: 10px 10px;
+    }
+    th{
+        padding:20px 20px;
+        font-size: larger;
+        background: goldenrod;
+        color:rgba(88, 84, 84, 0.882) ;
+
+    }
+    table:hover{
+        cursor:pointer;
+    }
+    td:hover{
+        opacity:0.8;
+    }
+</style>
+
+
+<section id="about" class="about-section py-5">
+  <div class="container">
+    <h2 class="text-center mb-4" 
+        style="color: #333; font-family: 'Arial', sans-serif; font-size: 50px; font-weight: bold; margin-top:0;">
+      Users Details
+      </h2>
+<br><br><br>
+<table>
+
+    <tr class="head_t">
+        <th>User ID</th>
+        <th>Username</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Email</th>
+    </tr>
+    {% for user in users %}
+
+    <tr>
+      {% if user.is_superuser %}
+      {% else %}
+      <td>{{user.id}}</td>
+        <td>{{user.username}}</td>
+        {% if user.first_name and user.last_name %}
+        <td>{{user.first_name}}</td>
+        <td>{{user.last_name}}</td>
+        {% else %}
+        <td>------</td>
+        <td>------</td>
+
+        {% endif %}
+        {% comment %} <td>{{item.amount_pay}}</td> {% endcomment %}
+        <td>{{user.email}}</td> 
+        {% endif %}
+
+        
+    </tr>
+    {% endfor %}
+
+</table>
+</div>
+</section>
+
+{% include "footer.html" %}
+{% endblock %}

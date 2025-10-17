@@ -15,7 +15,6 @@ def cart_summary(request):
 
 
 
-
 def cart_add(request):
 	# Get the cart
 	cart = Cart(request)

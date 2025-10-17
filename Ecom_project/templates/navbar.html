@@ -90,10 +90,17 @@
 <!-- Collect the nav links, forms, and other content for toggling -->
 <div class="collapse navbar-collapse menu-ui-design" id="navbar-menu">
     <ul class="nav navbar-nav navbar-center" data-in="fadeInDown" data-out="fadeOutUp">
+        {% if user.is_authenticated and user.is_superuser %}
+        <li><a href="{% url 'shipped_dash' %}">Shipped</a></li>
+        <li><a href="{% url 'not_shipped_dash' %}">Not shipped</a></li>
+        {% endif %}
         <li><a href="{% url 'Home' %}">home</a></li>
         <li><a href="{% url 'About' %}">About Us</a></li>
-
+        {% if user.is_authenticated and user.is_superuser %}
+        <li><a href="{% url 'user_details' %}">Users</a></li>
+        {% else %}
         <li class="scroll"><a href="#new-arrivals">new arrival</a></li>
+        {% endif %}
 
         <li class="scroll"><a href="#footer">contact</a></li>
         <li><a href="{% url 'Category' %}">Categories</a></li>

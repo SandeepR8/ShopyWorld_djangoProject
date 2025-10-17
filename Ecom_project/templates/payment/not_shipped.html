@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}Not shipped{% endblock %}
+
+{% block content %}
+{% include "navbar.html" %}
+<style>
+    table{
+        width: 100%;
+    }
+
+    th,td{
+        text-align: center;
+    }
+    table,th,td{
+        border: 3px solid;
+    }
+    td{
+        padding: 10px 10px;
+    }
+    th{
+        padding:20px 20px;
+        font-size: larger;
+        background: goldenrod;
+        color:rgba(88, 84, 84, 0.882) ;
+
+    }
+</style>
+
+
+<section id="about" class="about-section py-5">
+  <div class="container">
+    <h2 class="text-center mb-4" 
+        style="color: #333; font-family: 'Arial', sans-serif; font-size: 50px; font-weight: bold; margin-top:0;">
+       Not Shipped Items
+    </h2>
+<br><br><br>
+<table>
+
+    <tr class="head_t">
+        <th>S.no</th>
+        <th>User</th>
+        <th>customer Email</th>
+        <th>Price</th>
+        <th>Order date</th>
+    </tr>
+    {% for item in obj %}
+
+    <tr>
+        <td><a href='{% url "orders" item.id %}'>{{item.id}}</a></td>
+        <td>{{item.user}}</td>
+        <td>{{item.email}}</td>
+        <td>{{item.amount_pay}}</td>
+        <td>{{item.date_ordered}}</td>
+    </tr>
+    {% endfor %}
+
+</table>
+</div>
+</section>
+
+{% include "footer.html" %}
+{% endblock %}
