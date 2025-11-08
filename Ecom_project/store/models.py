@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import User
-import uuid
 
 
 class CustomerProfile(models.Model):
@@ -12,15 +11,9 @@ class CustomerProfile(models.Model):
     state = models.CharField(max_length=100, blank=True, null=True)
     zipcode = models.CharField(max_length=20, blank=True, null=True)
     country = models.CharField(max_length=100, blank=True, null=True)
-    email_token = models.CharField(max_length=100, blank=True, null=True)
-    is_verified = models.BooleanField(default=False)
     date_modified = models.DateTimeField(auto_now=True)
     old_cart = models.CharField(max_length=300, blank=True, null=True)
 
-    def save(self, *args, **kwargs):
-        if not self.email_token:
-            self.email_token = str(uuid.uuid4())
-        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.user.username if self.user else "No User"

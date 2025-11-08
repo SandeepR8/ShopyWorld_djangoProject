@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,get_object_or_404
 from cart.cart import Cart
 from .models import ShippingAddress,Order,OrderItem
 from django.contrib.auth.decorators import login_required
@@ -12,9 +12,10 @@ def payment_success(request):
 
 
 def Order_status(request):
-    orders = Order.objects.filter(user=request.user)
-    ordered_items = OrderItem.objects.filter(user = request.user)
-    return render(request,'payment/order_placed.html',{'orders':orders,'ordered_items':ordered_items})
+    user=request.user
+    orders = Order.objects.filter(user=user)
+    ordered_items = OrderItem.objects.filter(user = user).order_by('order')
+    return render(request,'payment/order_placed.html',{'orders':orders,'ordered_items':ordered_items,'user':user})
 
 def orders(request,pk):
     orders = Order.objects.get(id=pk)
@@ -38,6 +39,47 @@ def not_shipped_dash(request):
         order=Order.objects.filter(shipped=False)
         return render(request,'payment/not_shipped.html',{'obj':order})
     
+def single_checkout(request,pk):
+    print(request.session['cart'])
+
+    print(request.session['cart'][str(pk)])
+    product=get_object_or_404(Product,pk=pk)
+    cart_data = request.session['cart'][str(pk)]
+    quantity = cart_data['quantity']
+    price = cart_data['price']
+    total = float(price) * quantity
+    print(total)
+    if request.method == 'POST':
+        form = ShippingAddressForm(request.POST)
+        if form.is_valid():
+            shipping_address = form.save(commit=False)
+            shipping_address.user = request.user 
+            shipping_address.save()
+
+            # Optionally handle billing_same checkbox
+            billing_same = form.cleaned_data.get("billing_same")
+            if billing_same:
+                request.session['shipping_id'] = shipping_address.id
+                request.session['billing_same'] = form.cleaned_data.get('billing_same')
+
+                
+            else:
+                # creating seesion for store shipping address for custom use
+                request.session['shipping_id'] = shipping_address.id
+                request.session['billing_same'] = False
+
+            return redirect('billing')
+    else:
+        form = ShippingAddressForm()
+
+    return render(request, 'payment/checkout.html', {
+        "form": form,
+        "cart_products": product,
+        'price':price,
+        'quantity':quantity,
+        'total' : total,
+        'single':True
+    })
 
 
 
@@ -59,12 +101,12 @@ def checkout(request):
             if billing_same:
                 request.session['shipping_id'] = shipping_address.id
                 request.session['billing_same'] = form.cleaned_data.get('billing_same')
+
                 
             else:
                 # creating seesion for store shipping address for custom use
                 request.session['shipping_id'] = shipping_address.id
-
-                
+                request.session['billing_same'] = False
 
             return redirect('billing')
     else:
@@ -74,6 +116,7 @@ def checkout(request):
         "form": form,
         "cart_products": cart_products,
         "totals": totals,
+        'single':False
     })
 
 # Process Order view
@@ -166,7 +209,7 @@ def Billing(request):
         billing_details = None
         billing_form = BillingForm()
 
-
+        
 
     return render(request,'payment/billing.html',{
         "cart_products": cart_products,

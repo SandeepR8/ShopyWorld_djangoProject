@@ -8,7 +8,7 @@ admin.site.register(Order)
 
 @admin.register(CustomerProfile)
 class CustomerProfileAdmin(admin.ModelAdmin):
-    list_display = ('user', 'phone', 'city', 'state', 'is_verified', 'date_modified')
+    list_display = ('user', 'phone', 'city', 'state', 'date_modified')
     search_fields = ('user__username', 'phone', 'city', 'state', 'zipcode') 
-    list_filter = ('is_verified', 'state', 'country') 
+    list_filter = ('state', 'country') 
     ordering = ('-date_modified',) 

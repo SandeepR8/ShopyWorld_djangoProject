@@ -15,22 +15,27 @@ from django.db.models import Q
 import json
 from cart.cart import Cart
 import random
-
+from django.core.paginator import Paginator
+import smtplib
 
 def Home(request):
     query = request.GET.get('search', '')
     if query:
-        products = Product.objects.filter(
+        product = Product.objects.filter(
             Q(name__icontains=query) |
             Q(description__icontains=query) |
             Q(category__name__icontains=query) 
         ).distinct()
 
     else:
-        products = Product.objects.all()
+        products = Product.objects.all().order_by('id')
+        paginator = Paginator(products, 8)  
+
+        page_number = request.GET.get('page')
+        product = paginator.get_page(page_number)
 
     return render(request, 'core/home.html', {
-        'products': products,'query':query
+        'products': product,'query':query
     })
 
 
@@ -38,8 +43,15 @@ def User_details(request):
     user=User.objects.all()
     return render(request,'core/user_details.html',{'users':user})
 
+def user_delete(request):
+    user = request.user
+    user.delete()
+    messages.success(request,'User was removed!')
+    return redirect('Home')
+
 def specific_product(request,pk):
     product=get_object_or_404(Product,pk=pk)
+    
     return render(request,'core/specific_product.html',{'product':product})
 
 def about(request):
@@ -49,49 +61,60 @@ def Categories(request):
     categories=Category.objects.all()
     return render(request,'core/category.html',{'categories':categories})
 
+def personal_settings(request):
+    user = request.user
+    if request.method == 'POST':
+        oldPassword = request.POST.get('OldPassword')
+        newPassword = request.POST.get('NewPassword')
+        user = authenticate(username = user, password = oldPassword)
+        if user :
+            user.set_password(newPassword)
+            user.save()
+            messages.success(request,'Password updated!')
 
-def Verify_otp(request):
-    return render(request,'registration/otp_verification.html')
+
+        else:
+            messages.error(request,'Old password mis-matched!')
+
+
+    return render(request,'core/settings.html',{'user':user})
+
 
 def ForgetPassword(request):
     if request.method =='POST':
         email = request.POST.get('email')
         if email:
             if User.objects.filter(email = email).exists():
-                user=User.objects.get(email=email)
-                otp=random.randint(100000,999999)
-                subject = "Your OTP for Verification- ShopyWorld"
-                message = f'Hi User! \n \n Your OTP is :{otp} \n\n This OTP is valid for 5 minutes.'
-                email_from = settings.DEFAULT_FROM_EMAIL
-                recipient_list = [email]
-                send_mail(subject, message, email_from, recipient_list)
-                messages.success(request,'OTP Sent to mail')
-                return render(request,'registration/otp_verification.html',{'user':user})
+                return render(request,'registration/password_change.html',{'email':email})
             else:
                 messages.error(request,'Email is not registered.')
-
         else:
-            messages.error(request,'Email field is empty')
+            messages.error(request,'Email field is empty or invalid email')
 
     return render(request,'registration/Forgetpassword.html')
 
 def PasswordChange(request):
-    if request.user.is_authenticated:
-        user = request.user
         if request.method == "POST":
+            email = request.POST.get('email')
+            user=User.objects.get(email=email)
             password1 = request.POST.get('password1')
             password2 = request.POST.get('password2')
-            if password1 == password2 :
-                user.set_password(password2)
-                user.save()
-                update_session_auth_hash(request, user)  # keep user logged in
-                messages.success(request, "Your password has been updated successfully.")
-                return redirect("Home")
+            if password1 == '':
+                messages.error(request,'Password1 is empty')
+                return render(request,'registration/password_change.html',{'email':email})
+
             else:
-                messages.error(request, "Password does not match. Please retry again. ")
-                return render(request,"registration/password_change.html")
+                if password1 == password2 :
+                    user.set_password(password2)
+                    user.save()
+                    update_session_auth_hash(request, user)  # keep user logged in
+                    messages.success(request, "Your password has been updated successfully.")
+                    return redirect("login")
+                else:
+                    messages.error(request, "Password does not match. Please retry again. ")
+                return render(request,'registration/password_change.html',{'email':email})
                 
-    return render(request,"registration/password_change.html")
+        return render(request,"registration/password_change.html")
 
 def Userprofile(request):
     user = request.user
@@ -130,42 +153,17 @@ def update_user(request):
             "form": profile_form
         })
 
-    
 
-    
-
-# ✅ Send email with token
-def send_email_token(user):
-    token = str(uuid.uuid4())
-    profile = CustomerProfile.objects.get(user=user)
-    profile.email_token = token
-    profile.save()
-
-    verify_url = settings.SITE_URL + reverse('verify_email', kwargs={'token': token})
-    subject = "Verify your email - MyShop"
-    message = f"Hi {user.username},\n\nClick the link below to verify your email:\n{verify_url}\n\nThanks!"
-    email_from = settings.DEFAULT_FROM_EMAIL
-    recipient_list = [user.email]
-
-    send_mail(subject, message, email_from, recipient_list)
 
 def valid_password(password):
-    d=False
-    s=False
-    l=False
-    u=False
-    if len(password) < 8 :
+    if len(password) < 8:
         return False
-    elif password.isupper():
-        u=True
-    elif password.islower():
-        l=True
-    elif password.isdigit():
-        d=True
-    else:
-        s=True
-    return s and d and l and u
-    
+    d = any(ch.isdigit() for ch in password)
+    l = any(ch.islower() for ch in password)
+    u = any(ch.isupper() for ch in password)
+    s = any(not ch.isalnum() for ch in password)
+    return d and l and u and s
+
 
 
 # ✅ Register new user
@@ -197,28 +195,10 @@ def register_view(request):
         CustomerProfile.objects.create(user=user)
 
         # send verification email
-        send_email_token(user)
-        messages.success(request, "Account created! Please check your email to verify.")
-        return redirect("login")
+        messages.success(request, "Account created Successfully!")
+        return redirect('Home')
 
     return render(request, "registration/signup.html")
-
-
-# ✅ Verify email
-def verify_email(request, token):
-    try:
-        profile = CustomerProfile.objects.get(email_token=token)
-        profile.is_verified = True
-        profile.email_token = None  
-        profile.save()
-        messages.success(request, "Email verified successfully! You can now login.")
-
-        return render(request, "verification.html", {"verified": True})
-    except CustomerProfile.DoesNotExist:
-        messages.error(request, "Invalid or expired token.")
-
-
-        return render(request, "core/verification.html", {"verified": False})
 
 
 
@@ -232,10 +212,6 @@ def login_view(request):
 
         if user is not None:
             profile = CustomerProfile.objects.get(user=user)
-            if not profile.is_verified:
-                messages.error(request, "Email not verified! Check your inbox.")
-                return redirect("login")
-
             login(request, user)
             #getting the current user
             current_user = CustomerProfile.objects.get(user__id=request.user.id)

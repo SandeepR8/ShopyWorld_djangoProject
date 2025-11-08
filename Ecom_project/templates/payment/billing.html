@@ -15,17 +15,17 @@
       
       .order-totals div {
         display: flex;
-        justify-content: space-between; /* Title left, value right */
+        justify-content: space-between; 
         margin-bottom: 8px;
       }
       
       .order-totals span:first-child {
-        font-weight: 500; /* title */
+        font-weight: 500; 
         color: #333;
       }
       
       .order-totals span:last-child {
-        font-weight: 600; /* value */
+        font-weight: 600; 
         color: #000;
       }
       
@@ -52,13 +52,13 @@
         opacity:0.6;
       }
       .checkout-container {
-        background-color: #ffffff; /* White background */
-        padding: 20px;             /* Space inside the form */
-        border-radius: 10px;       /* Rounded corners */
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15); /* Even shadow on all sides */
+        background-color: #ffffff; 
+        padding: 20px;            
+        border-radius: 10px;       
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
     }
     .checkout-container .form-control {
-      margin-bottom: 15px; /* space between input fields */
+      margin-bottom: 15px;
   }
   .heading{
     font-size:13px;
@@ -108,20 +108,21 @@
                 <p>Zipcode : {{shipping_details.shipping_zipcode}}</p>
                 {% endif %}
                 <p>Country : {{shipping_details.shipping_country}}</p>
-                <button class='btn-continue'><a href='{% url "process_order" %}' style='color:white'>PayNow</a></button>
+                <button class='btn-continue'><a href='{% url "process_order" %}' style='color:white'>Place Order</a></button>
 
 
                 {% else %}
 
                 <form method='POST' action='{% url "process_order" %}'>
+                  {% csrf_token %}
                 {{billing_form|crispy}}
-                <button type='submit' class='btn-continue'>PayNow</button>
+                <button type='submit' class='btn-continue'>Place Order</button>
                 {% endif %}
 
 
                   </div>
                   <div class="checkout-container">
-                    <h3 class='heading'>Payment Method</h3><hr>
+                    {% comment %} <h3 class='heading'>Payment Method</h3><hr> {% endcomment %}
                   </div>
                 </div>
                 

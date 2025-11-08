@@ -16,6 +16,7 @@
         <title>ShopyWorld | {% block title %} {% endblock %}</title>
  
         <!-- For favicon png -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 		<link rel="shortcut icon" type="image/icon" href="{% static 'assets/logo/favicon.png' %}"/>
        
         <!--font-awesome.min.css-->
@@ -41,9 +42,16 @@
         <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
         <link href={% static 'assets/css/main.css' %} rel="stylesheet">
 
+
         
         <!--responsive.css-->
         <link rel="stylesheet" href="{% static 'assets/css/responsive.css' %}">
+
+        {% comment %} custom css {% endcomment %}
+        <link rel="stylesheet" href="{% static 'assets/css/custom.css' %}">
+
+
+
         
        
 

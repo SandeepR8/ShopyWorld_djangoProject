@@ -3,65 +3,7 @@
 {% block content %}
 {% include "navbar.html" %}
 
-<style>
-.cart-container { width:100%; max-width:900px; margin:30px auto; display:flex; flex-direction:column; gap:20px; }
-.cart-item { display:flex; align-items:center; background:#fafafa; border-radius:8px; padding:16px; box-shadow:0 2px 6px rgba(0,0,0,0.08); gap:20px; }
-.cart-img { width:100px; height:100px; object-fit:cover; border-radius:6px; }
-.cart-info { flex:2; display:flex; flex-direction:column; gap:8px; }
-.cart-name { font-size:1.1rem; font-weight:bolder; }
-.cart-description { font-size:1rem; font-weight:500; }
-.cart-price { color:#b76e79; font-size:1.15rem; font-weight:bold; }
-.cart-quantity { display:inline-flex; align-items:center; gap:5px; border:1px solid #e5e5e5; border-radius:6px; padding:2px 4px; width:90px; }
-.qty-btn { background:none; border:none; font-size:1.2em; padding:2px; cursor:pointer; color:#333; margin-left:5px; }
-.qty-num { margin:0 3px; min-width:20px; text-align:center; font-weight:500; }
-.update-btn { background:#0bda42; padding:5px 4px; border-radius:4px; color:white; margin-left:10px; cursor:pointer;width; }
-.cart-btn { margin-left:10px; padding:8px 18px; border:none; border-radius:6px; font-weight:500; cursor:pointer; transition:background .2s; }
-.buy-btn { background:goldenrod; color:#fff; }
-.remove-btn { background:#25ecf0; color:#fff; }
-.qty-btn:hover,.update-btn:hover,.cart-btn:hover{ opacity:0.8; }
-.subtotal-card {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: #fff;
-  box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
-  padding: 15px 30px;
-  font-family: 'Arial', sans-serif;
-  display: flex;
-  flex-direction: column;
-  max-width: 500px;
-  margin: 0 auto;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
-  z-index: 1000;
-}
 
-.subtotal-row {
-  display: flex;
-  justify-content: space-between;
-  font-size: 16px;
-  margin: 5px 0;
-}
-
-.subtotal-row.total {
-  font-weight: bold;
-  font-size: 18px;
-}
-
-.label {
-  color: #555;
-}
-
-.value {
-  color: #111;
-}
-
-.subtotal-divider {
-  border-top: 1.5px solid #ddd;
-  margin: 8px 0;
-}
-</style>
  <!-- Page Title -->
  <div class="page-title light-background">
   <div class="container d-lg-flex justify-content-between align-items-center">
@@ -69,7 +11,12 @@
     <nav class="breadcrumbs">
       <ol>
         <li><a href="{% url 'Home' %}">Home</a></li>
+        {% if user.is_authenticated  %}
         <li><a href='{% url "Order_status" %}'>Orders Status</a></li>
+        {% else %}
+        <li><a href='#'>Cart items</a></li>
+        
+        {% endif %}
       </ol>
     </nav>
   </div>
@@ -87,6 +34,7 @@
   {% endfor %}
 </div>
 {% endif %}
+
 {% for item in cart_products %}
   {% with product=item.product quantity=item.quantity %}
     <div class="cart-item" id="cart-item-{{ product.id }}">
@@ -114,7 +62,7 @@
 
 
       </div>
-      <button class="cart-btn buy-btn">Buy</button>
+      <button class="cart-btn buy-btn"><a href='{% url "single_checkout" product.id %}' style='color:white;' >Buy</a></button>
       <button class="cart-btn remove-btn delete-product" data-index="{{ product.id }}">Delete</button>
     </div>
   {% endwith %}
@@ -124,19 +72,8 @@
   <p>Click here to  <a href="{% url 'Home' %}">Shop now</a></p>
 </center>
   {% endfor %}
+
 <div class="subtotal-card">
-  {% comment %} <div class="subtotal-row">
-    <span class="label">Items Price:</span>
-    <span class="value" id="items-price"> &#8377;{{totals}}</span>
-  </div>
-
-  <div class="subtotal-row">
-    <span class="label">Delivery Charges:</span>
-    <span class="value" id="delivery-charges">&#8377; 30.00</span>
-  </div> {% endcomment %}
-
-  {% comment %} <div class="subtotal-divider"></div> {% endcomment %}
-
   <div class="subtotal-row total">
     <span class="label">Total Amount:</span>
     {% if totals == 0 %}

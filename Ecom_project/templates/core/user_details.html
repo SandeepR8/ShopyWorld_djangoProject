@@ -3,35 +3,7 @@
 
 {% block content %}
 {% include "navbar.html" %}
-<style>
-    table{
-        width: 100%;
-    }
 
-
-    th,td{
-        text-align: center;
-    }
-    table,th,td{
-        border: 3px solid;
-    }
-    td{
-        padding: 10px 10px;
-    }
-    th{
-        padding:20px 20px;
-        font-size: larger;
-        background: goldenrod;
-        color:rgba(88, 84, 84, 0.882) ;
-
-    }
-    table:hover{
-        cursor:pointer;
-    }
-    td:hover{
-        opacity:0.8;
-    }
-</style>
 
 
 <section id="about" class="about-section py-5">
@@ -41,6 +13,7 @@
       Users Details
       </h2>
 <br><br><br>
+<div class='table-responsive'>
 <table>
 
     <tr class="head_t">
@@ -74,6 +47,7 @@
     {% endfor %}
 
 </table>
+</div>
 </div>
 </section>
 

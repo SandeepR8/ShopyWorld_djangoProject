@@ -4,16 +4,18 @@
 
 {% block content %}
 {% include "navbar.html" %}
-<center>
-<div>
-    <div>
+
+
+<div class="container" style="width: 50%; margin-bottom:100px">
+    <h3>Categories</h3>
+    <div class='categories'>
         {% for category in categories %}
             <ul>
-                <li><a href='#'>{{category.name}}</a></li>
+                <li style="width: 100%;"><a href='{% url "Home" %}'>{{category.name}}</a></li>
             </ul>        
         {% endfor %}
     </div>
 </div>
-</center>
-
+<hr>
+{% include "footer.html" %}
 {% endblock  %}

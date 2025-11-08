@@ -6,65 +6,23 @@
 
 {% block content %}
 <style>
-    .order-totals {
-        margin-top: 20px;
-        padding: 15px;
-        border-top: 1px solid #ddd;
-        font-size: 16px;
-      }
-      
-      .order-totals div {
-        display: flex;
-        justify-content: space-between; /* Title left, value right */
-        margin-bottom: 8px;
-      }
-      
-      .order-totals span:first-child {
-        font-weight: 500; /* title */
-        color: #333;
-      }
-      
-      .order-totals span:last-child {
-        font-weight: 600; /* value */
-        color: #000;
-      }
-      
-      .order-total {
-        border-top: 2px solid #333;
-        padding-top: 10px;
-        font-size: 18px;
-        font-weight: bold;
-      }
-      .btn-continue{
-        background:black;
-        color:white;
-        text-align:center;
-        width:100%;
-        padding:10px 20px;
-        margin-top:40px;
-        border-radius:10px;
-        transition:0.3 ease-in-out;
-      }
-      .btn-continue:hover{
-        opacity:0.8;
-      }
-      .btn-continue:active{
-        opacity:0.6;
-      }
-      .checkout-container {
-        background-color: #ffffff; /* White background */
-        padding: 20px;             /* Space inside the form */
-        border-radius: 10px;       /* Rounded corners */
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15); /* Even shadow on all sides */
-    }
-    .checkout-container .form-control {
-      margin-bottom: 15px; /* space between input fields */
-  }
-  .heading{
-    font-size:13px;
-    font-weight:bold;
-  }
  
+  .btn-continue{
+    background:black;
+    color:white;
+    text-align:center;
+    width:100%;
+    padding:10px 20px;
+    margin-top:40px;
+    border-radius:10px;
+    transition:0.3 ease-in-out;
+  }
+  .btn-continue:hover{
+    opacity:0.8;
+  }
+  .btn-continue:active{
+    opacity:0.6;
+  }
       
 </style>
 
@@ -104,8 +62,7 @@
              <form method='POST' action='{% url "checkout" %}'>
               {% csrf_token %}
               {{form|crispy}}
-              <button type='submit' class='btn-continue'>Continue to Payment</button>
-
+              <button type='submit' class='btn-continue'>Continue</button>
              </form>
               
                   </div>
@@ -118,7 +75,45 @@
               <div class="order-summary-header">
                 <h3>Order Summary</h3>
               </div>
-          
+{% if single %}
+<div class="order-summary-content">
+  <div class="order-items">
+      <div class="order-item">
+        <div class="order-item-image">
+          <img src="{{ cart_products.image.url }}" alt="{{ cart_products.name }}" class="img-fluid">
+        </div>
+        <div class="order-item-details">
+          <h4>{{ cart_products.name }}</h4>
+          <div class="order-item-price">
+            <span class="quantity">{{ quantity }} ×</span>
+            <span class="price">&#8377;{{ price }}</span>
+          </div>
+        </div>
+      </div>
+  </div>
+
+  <!-- Totals -->
+  <div class="order-totals">
+    <div class="order-subtotal d-flex justify-content-between">
+      <span>Subtotal</span>
+      <span>&#8377;{{ total }}</span>
+    </div>
+    <div class="order-shipping d-flex justify-content-between">
+      <span>Shipping</span>
+      <span>&#8377;30</span>
+    </div>
+    <div class="order-tax d-flex justify-content-between">
+      <span>Tax</span>
+      <span>&#8377;21.00</span>
+    </div>
+    <div class="order-total d-flex justify-content-between">
+      <span>Total</span>
+      <span>&#8377;{{ total|add:30|add:21 }}</span>
+    </div>
+  </div>
+</div>
+
+{% else %}
               <div class="order-summary-content">
                 <div class="order-items">
                   {% for item in cart_products %}
@@ -164,6 +159,7 @@
                   </div>
                 </div>
               </div>
+  {% endif %}
             </div>
           </div>
           

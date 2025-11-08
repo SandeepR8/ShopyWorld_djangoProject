@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Settings{% endblock title %}
+{% block content %}
+{% include "navbar.html" %}
+
+
+<div class="container-main">
+  <div class="profile-sidebar">
+    <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Profile Picture">
+    <h3>{{user}}</h3>
+    <p>{{ user.email}}</p>
+    <hr>
+
+    <div class="menu">
+      <ul>
+        <li ><a href="{% url "userprofile" %}" class="text-dark" disabled><i class="fas fa-address-card" style="margin-right: 10px;"></i> Address</a></li>
+        <li><a href="{% url "Order_status" %}" class="text-dark" active><i class="fas fa-box" style="margin-right: 10px;"></i> My Orders</a></li>
+        <li style="background: #f0f0f0;transform: translateX(5px);"><a href="{% url "settings" %}" class="text-dark"><i class="fa-solid fa-gear" style="margin-right: 10px;"></i>Settings</a></li>
+        <hr>
+        <li class="logout"><a href="{% url 'logout' %}" class="text-danger"><i class="fa fa-sign-out" style="margin-right:10px"></i>Logout</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="cart-container">
+    <h3>Settings</h3>
+    <hr>
+    <p style="margin-left: 20px;margin-bottom: 0;">Your Account</p>
+    <div class="privacy-info account">
+      <img src="{% static 'assets/images/profile_img.png' %}" alt="profile picture" width="40px" height="60px" style="margin:0px 10px;">
+      <div style="display: flex;flex-direction: column;">
+        <span style="font-weight: bold;"><a href="{% url 'userprofile' %}">{{user}}</a></span>
+        <span>{{user.email}}</span>
+      </div>
+    </div>
+
+
+    <hr style="margin: 0;">
+    <p style="margin-left: 20px;margin-bottom: 0;margin-top: 0;">Privacy and more</p>
+    <div class="privacy-info">
+      <div class="privacy-btn">
+        <span style="margin-right: 15px;">Language</span>
+        <span class="sp-l">Englis(uk)  ></span>
+      </div>
+      <div class="privacy-btn">
+        <span>Data Protection</span>
+        <span class="sp-l">Private  ></span>
+      </div>
+      <div class="privacy-btn">
+        <span style="margin-right:16px;">Permissions</span>
+        <span class="sp-l">Enabled  ></span>
+      </div>
+      <div class="privacy-btn">
+        <span style="margin-right: 123px;">help?</span>
+        <span class="sp-l">  ></span>
+      </div>
+
+    </div>
+    <hr style="margin: 0;">
+    <div class="password">
+      <p style="margin-left: 20px;margin-bottom: 0;margin-top: 0;">Update Password</p>
+      {% if messages %}
+      <div class="messages">
+        {% for message in messages %}
+          <div class="alert {{ message.tags }}">
+            <span>{{ message }}</span>
+            <button class="close-btn" onclick="this.parentElement.style.display='none';">&times;</button>
+          </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+      <form action="{% url 'settings' %}" method="post" class='form'>
+        {% csrf_token %}
+        <input type="text" class="form-control mb-3" placeholder="Old Password" name='OldPassword'>
+        <input type="text" class="form-control mb-3" placeholder="New Password" name='NewPassword'>
+        <button type='submit' class='btn btn-primary'>Change Password</button>
+
+        
+        
+    </form>
+
+    </div>
+    <hr style="margin: 0;">
+    <p style="margin-left: 20px;margin-bottom: 0;margin-top: 0;">Account Delete</p>
+
+    <div class="delete">
+      <div style="display: flex;justify-content: center;">
+      <a href="{% url 'delete' %}" style="
+      border:1px solid rgba(255, 0, 0, 0.5);
+      padding: 8px 10px;
+      color: red;
+      border-radius: 10px;
+      margin:auto;
+      ">Delete</a>
+      </div>
+
+
+
+    </div>
+
+  </div>
+ 
+</div>
+<hr>
+{% include "footer.html" %}
+
+<script>
+  const passwordInput = document.getElementById('passwordInput');
+  const passwordToggle = document.getElementById('passwordToggle');
+  
+  passwordToggle.addEventListener('click', () => {
+    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+    passwordInput.setAttribute('type', type);
+    passwordToggle.classList.toggle('fa-eye');
+    passwordToggle.classList.toggle('fa-eye-slash');
+  });
+  
+</script>
+{% endblock %}

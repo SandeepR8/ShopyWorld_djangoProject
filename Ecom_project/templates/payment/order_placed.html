@@ -1,74 +1,9 @@
 {% extends "base.html" %}
-{% block title %}Cart{% endblock title %}
+{% load static %}
+{% block title %}Order Status{% endblock title %}
 {% block content %}
 {% include "navbar.html" %}
 
-<style>
-
-.cart-container { width:100%; max-width:900px; margin:30px auto; display:flex; flex-direction:column; gap:20px; }
-.cart-item { display:flex; align-items:center; background:#fafafa; border-radius:8px; padding:16px; box-shadow:0 2px 6px rgba(0,0,0,0.08); gap:20px; }
-.cart-img { width:100px; height:100px; object-fit:cover; border-radius:6px; }
-.cart-info { flex:2; display:flex; flex-direction:column; gap:8px; }
-.cart-name { font-size:1.1rem; font-weight:bolder; }
-.cart-description { font-size:1rem; font-weight:500; }
-.cart-price { color:#b76e79; font-size:1.15rem; font-weight:bold; }
-.cart-quantity { display:inline-flex; align-items:center; gap:5px; border:1px solid #e5e5e5; border-radius:6px; padding:2px 4px; width:90px; }
-.qty-btn { background:none; border:none; font-size:1.2em; padding:2px; cursor:pointer; color:#333; margin-left:5px; }
-.qty-num { margin:0 3px; min-width:20px; text-align:center; font-weight:500; }
-.update-btn { background:#0bda42; padding:5px 4px; border-radius:4px; color:white; margin-left:10px; cursor:pointer;width; }
-.cart-btn { margin-left:10px; padding:8px 18px; border:none; border-radius:6px; font-weight:500; cursor:pointer; transition:background .2s; }
-.buy-btn { background:goldenrod; color:#fff; }
-.remove-btn { background:#25ecf0; color:#fff; }
-.qty-btn:hover,.update-btn:hover,.cart-btn:hover{ opacity:0.8; }
-.subtotal-card {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: #fff;
-  box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
-  padding: 15px 30px;
-  font-family: 'Arial', sans-serif;
-  display: flex;
-  flex-direction: column;
-  max-width: 500px;
-  margin: 0 auto;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
-  z-index: 1000;
-}
-
-.subtotal-row {
-  display: flex;
-  justify-content: space-between;
-  font-size: 16px;
-  margin: 5px 0;
-}
-
-.subtotal-row.total {
-  font-weight: bold;
-  font-size: 18px;
-}
-
-.label {
-  color: #555;
-}
-
-.value {
-  color: #111;
-}
-
-.subtotal-divider {
-  border-top: 1.5px solid #ddd;
-  margin: 8px 0;
-}
-.circle{
-  width: 10px;
-  height: 10px;
-  border:1px solid;
-  border-radius: 100%;
-}
-</style>
  <!-- Page Title -->
  <div class="page-title light-background">
   <div class="container d-lg-flex justify-content-between align-items-center">
@@ -81,28 +16,59 @@
     </nav>
   </div>
 </div>
+<div class="container-main">
+  <div class="profile-sidebar">
+    <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Profile Picture">
+    <h3>{{user}}</h3>
+    <p>{{ user.email }}</p>
+    <hr>
+
+    <div class="menu">
+      <ul>
+        <li><a href="{% url "userprofile" %}" class="text-dark"><i class="fas fa-address-card" style="margin-right: 10px;"></i> Address</a></li>
+        <li style="background: #f0f0f0;transform: translateX(5px);"><a href="{% url "Order_status" %}" class="text-dark" active><i class="fas fa-box" style="margin-right: 10px;"></i> My Orders</a></li>
+        <li><a href="{% url "settings" %}" class="text-dark"><i class="fa-solid fa-gear" style="margin-right: 10px;"></i>Settings</a></li>
+        <hr>
+        <li class="logout"><a href="{% url 'logout' %}" class="text-danger"><i class="fa fa-sign-out" style="margin-right:10px"></i>Logout</a></li>
+      </ul>
+    </div>
+  </div>
+
 <div class="cart-container">
-
-
 {% for item in ordered_items %}
   {% with product=item.product quantity=item.quantity %}
     <div class="cart-item">
       <img src="{{ product.image.url }}" alt="Product" class="cart-img">
       <div class="cart-info">
-        <div class="cart-name">{{ product.name }}</div>
+        <div class="cart-name">{{ product.name }} 
+          {% if item.order.shipped %}
+          <div class="tracker-step">shipped</div>
+          {% endif %}
+        </div>
         <div class="cart-description">{{ product.description }}</div>
-          <div class="cart-price">{{quantity}} X {{ item.price }}</div>
-        
+          <div class="cart-price">{{quantity}} X {{ item.price }}</div><hr>
+          <div class="title">Tracking</div>
+          <div class="tracking-container">
+                <div class="tracker-step completed">Packed</div>
+                <div class="tracker-line"></div>
+
+                {% if item.order.shipped %}
+                <div class="tracker-step completed">shipped</div>
+                {% else %}
+                <div class="tracker-step active">shipped</div>
+                {% endif %}
+                <div class="tracker-line"></div>
+                <div class="tracker-step">reached</div>
+                <div class="tracker-line"></div>
+
+                <div class="tracker-step">Delivered</div>
+
+              
+          </div>
+          
       </div>
     </div>
-
-    
-      
-
-       
-       
      
-
   {% endwith %}
 {% empty %}
 <center>
@@ -111,5 +77,7 @@
 </center>
   {% endfor %}
   </div>
-
+</div>
+<hr>
+{% include "footer.html" %}
 {% endblock %}

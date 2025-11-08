@@ -65,7 +65,8 @@
                 </li>
                 <li role="separator" class="divider"></li>
                 <li><a href="{% url 'userprofile' %}"><i class="fa fa-user" style="margin-right:10px"></i> My Profile</a></li>
-                <li><a href="{% url 'password_change' %}"><i class="fa fa-key" style="margin-right:10px"></i> Change Password</a></li>
+                <li><a href="{% url 'Order_status' %}"><i class="fas fa-box-open" style="margin-right: 5px;"></i> My Orders</a></li>
+                <li><a href="{% url 'settings' %}"><i class="fa-solid fa-gear" style="margin-right: 5px;"></i> Settings</a></li>
                 <li><a href="{% url 'logout' %}"><i class="fa fa-sign-out" style="margin-right:10px"></i> Logout</a></li>
             {% else %}
                 <li><a href="{% url 'login' %}"><i class="fa fa-sign-in"></i> Login</a></li>

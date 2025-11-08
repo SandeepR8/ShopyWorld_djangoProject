@@ -51,12 +51,12 @@ Home
                                             <h4>great design collection</h4>
                                             <h2>cloth covered accent chair</h2>
                                             <p>
-                                                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiuiana smod tempor  ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip. 
-                                            </p>
+                                             Modern Swivel Accent Chair for Dining & Office – This Baltic fabric chair adds a stylish, contemporary touch to any space. Ideal for dining tables, office desks, or as a bedroom accent chair.
+                                                                 </p>
                                             <div class="packages-price">
                                                 <p>
-                                                    $ 399.00
-                                                    <del>$ 499.00</del>
+                                                    &#8377; 39999.00
+                                                    <del>&#8377; 49999.00</del>
                                                 </p>
                                             </div>
                                            
@@ -70,15 +70,15 @@ Home
                                     <div class="single-welcome-hero">
                                         <div class="welcome-hero-img">
                                             <img src="{% static 'assets/images/slider/slider1.png' %}" alt="slider image">
-                                        </div><!--/.welcome-hero-txt-->
-                                    </div><!--/.single-welcome-hero-->
-                                </div><!--/.col-->
-                            </div><!--/.row-->
-                        </div><!--/.welcome-hero-content-->
-                    </div><!-- /.container-->
-                </div><!-- /.single-slide-item-->
+                                        </div>>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-            </div><!-- /.item .active-->
+            </div>
 
             <div class="item">
                 <div class="single-slide-item slide2">
@@ -91,12 +91,12 @@ Home
                                             <h4>great design collection</h4>
                                             <h2>mapple wood accent chair</h2>
                                             <p>
-                                                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiuiana smod tempor  ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip. 
-                                            </p>
+                                                Product Dimensions:- Height: (29.0 in) X Width: (20 in) X Depth: 18.0 (inch) | Main Material:- Plastic | Leg Material Description: Solid Wood | Weight Capacity: 110 Kgs | Usage: Dining Room Furniture | Cleaning Instructions: Do not use abrasive or corrosive products. Use a damp cloth or cloth and mild soap.<br>
+                                                Its resistant polypropylene coating and warm and fashionable wooden effect metal legs, combined with the color of the wooden legs, will charm you. | The seat of the chair is wide and comfortable. Its high and envelope file welcomes you, for your greatest pleasure. The whole thing gives you optimum comfort for pleasant moments to share with your guests. Both elegant and comfortable, this Scandinavian chair brings a warm and a clean view to your interior décor.                                            </p>
                                             <div class="packages-price">
                                                 <p>
-                                                    $ 199.00
-                                                    <del>$ 299.00</del>
+                                                    &#8377; 19999.00
+                                                    <del>&#8377; 29999.00</del>
                                                 </p>
                                             </div>
                                            
@@ -131,12 +131,12 @@ Home
                                             <h4>great design collection</h4>
                                             <h2>valvet accent arm chair</h2>
                                             <p>
-                                                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiuiana smod tempor  ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip. 
-                                            </p>
+                                                DIMENSIONS: Spacious sofa measuring 182 cm in length, 85 cm in depth, and 90 cm in height, perfect for modern living spaces
+                                                COMFORT DESIGN: Plush cushioning with ergonomically designed backrest and deep seating for optimal relaxation                                            </p>
                                             <div class="packages-price">
                                                 <p>
-                                                    $ 299.00
-                                                    <del>$ 399.00</del>
+                                                    &#8377; 16999.00
+                                                    <del>&#8377; 23999.00</del>
                                                 </p>
                                             </div>
                                             
@@ -171,14 +171,12 @@ Home
     <div class="container">
         <div class="section-header">
             <h2>Products</h2>
-        </div><!--/.section-header-->
+        </div><
         <div class="new-arrivals-content">
             <div class="row">
 {% if products %}
                 {% for obj in products %}
                 {% if obj.sale %}
-            
-
                 <div class="col-md-3 col-sm-4">
                     <div class="single-new-arrival">
                         <div class="single-new-arrival-bg">
@@ -229,13 +227,31 @@ Home
                         <p class="arrival-product-price"> &#8377; {{obj.price}}</p>
                     </div>
                 </div>
-
                 {% endif %}
-
                 {% endfor %}
-                {% else %}
-                    <p>No products found{% if query %} for "{{ query }}"{% endif %}.</p>
-                {% endif %}
+
+{% else %}
+                <p>No products found{% if query %} for "{{ query }}"{% endif %}.</p>
+
+{% endif %}
+
+                <div class="container" style="text-align:center; gap:10px;">
+                    {% if products.has_previous or products.has_next %}
+                    {% if products.has_previous %}
+                        <a href="?page={{ products.previous_page_number }}{% if query %}&search={{ query }}{% endif %}" class="btn btn-Primary" style='background:rgb(38, 38, 198);color:white;padding:5px 5px;border-radius:5px'>Previous</a>
+                    {% endif %}
+                    
+                    <span>Page {{ products.number }} of {{ products.paginator.num_pages }}</span>
+                
+                    {% if products.has_next %}
+                        <a href="?page={{ products.next_page_number }}{% if query %}&search={{ query }}{% endif %}" class="btn btn-primary" style='background:rgba(38,38,198,0.9);color:white;padding:5px 8px;border-radius:5px;'>Next</a>
+                    {% endif %}
+                    {% else %}
+
+                    {% endif %}
+                </div>
+                
+                
 
             </div>
         </div>
@@ -263,7 +279,7 @@ Home
                             <ul>
                                 <li><a href="{% url "About" %}">about us</a></li><!--/li-
                                 <li><a href="#">contact us</a></li><!--/li-->
-                                <li><a href="#">store</a></li><!--/li-->
+                                <li><a href="#new-arrivals">store</a></li><!--/li-->
                             </ul><!--/ul-->
                         </div><!--/.hm-foot-menu-->
                     </div><!--/.hm-footer-widget-->
@@ -291,10 +307,9 @@ Home
                         </div><!--/.hm-foot-title-->
                         <div class="hm-foot-menu">
                             <ul>
-                                <li><a href="#">my account</a></li><!--/li-->
-                                <li><a href="#">wishlist</a></li><!--/li-->
-                                <li><a href="#">order history</a></li><!--/li-->
-                                <li><a href="#">my cart</a></li><!--/li-->
+                                <li><a href="{% url 'userprofile' %}">my account</a></li><!--/li-->
+                                <li><a href="{% url 'Order_status' %}">order history</a></li><!--/li-->
+                                <li><a href="{% url "cart_summary" %}">my cart</a></li><!--/li-->
                             </ul><!--/ul-->
                         </div><!--/.hm-foot-menu-->
                     </div><!--/.hm-footer-widget-->

@@ -3,27 +3,7 @@
 
 {% block content %}
 
-<style>
-  /* Chrome, Safari, Edge, Opera */
-input[type=number]::-webkit-inner-spin-button,
-input[type=number]::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
 
-/* Firefox */
-input[type=number] {
-  -moz-appearance: textfield;
-}
-.message{
-  position: relative;
-  background-color:green;
-  width: 100%;
-  height: 40px;
-}
-
-
-</style>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"
   integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
   crossorigin="anonymous"></script>
@@ -74,16 +54,45 @@ input[type=number] {
         <!-- Product Details -->
         <div class="col-lg-5" data-aos="fade-left" data-aos-delay="200">
           <div class="product-details">
+            <div class="product-badge-container">
+              <span class="badge-category">{{ product.category}}</span>
+              <div class="rating-group">
+                <div class="stars">
+                  <i class="fa fa-star" aria-hidden="true"></i>
+                  <i class="fa fa-star" aria-hidden="true"></i>
+                  <i class="fa fa-star" aria-hidden="true"></i>
+                  <i class="fa fa-star" aria-hidden="true"></i>
+                  <i class="fa fa-star-half-o" aria-hidden="true"></i>
+
+                  
+                </div>
+                <span class="review-text">(127 reviews)</span>
+              </div>
+            </div>
+
             <h1 class="product-name">{{ product.name }}</h1>
 
             <div class="pricing-section">
               <div class="price-display">
+                {% if product.sale %}
+                <span class="sale-price">{{ product.sale_price }}</span><strike>{{product.price}}</strike>
+                {% else %}
                 <span class="sale-price">{{ product.price }}</span>
+                {% endif %}
+
               </div>
             </div>
 
             <div class="product-description">
               <p>{{ product.description }}</p>
+
+              <div class="availability-status" style='margin-top:20px;'>
+                <div class="stock-indicator">
+                  <i class="bi bi-check-circle-fill"></i>
+                  <span class="stock-text" style='font-size:16px'>Available</span>
+                </div>
+                <div class="quantity-left">Only 23 items remaining</div>
+              </div>
             </div>
 
             <!-- Purchase Options -->
@@ -114,10 +123,30 @@ input[type=number] {
               </div>
               {% endif %}
             </div>
+            {% comment %} benefits section {% endcomment %}
+            <div class="benefits-list">
+              <div class="benefit-item">
+                <i class="bi bi-truck"></i>
+                <span style='font-size:12px'>Free delivery on orders over $75</span>
+              </div>
+              <div class="benefit-item">
+                <i class="bi bi-arrow-clockwise"></i>
+                <span style='font-size:12px'>45-day hassle-free returns</span>
+              </div>
+              <div class="benefit-item">
+                <i class="bi bi-shield-check"></i>
+                <span style='font-size:12px'>3-year manufacturer warranty</span>
+              </div>
+              <div class="benefit-item">
+                <i class="bi bi-headset"></i>
+                <span style='font-size:12px'>24/7 customer support available</span>
+              </div>
+            </div>
+            
           </div>
         </div>
       </div>
-    </div>
+ 
   </section>
 </main>
 
@@ -169,4 +198,7 @@ function minus(){
 
 
   </script>
+<hr>
+{% include "footer.html" %}
+
 {% endblock %}
