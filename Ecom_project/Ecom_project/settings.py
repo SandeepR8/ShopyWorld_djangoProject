@@ -29,6 +29,7 @@ SECRET_KEY = 'django-insecure-vy92&$#@bg^dc-%cne9ozveutir9ctz+o0i^p0ekhtrz7q@_p^
 DEBUG = True
 
 ALLOWED_HOSTS = []
+CSRF_TRUSTED_ORIGINS = []
 
 
 # Application definition
@@ -45,12 +46,14 @@ INSTALLED_APPS = [
     'payment_app',
     "crispy_forms",
     "crispy_bootstrap5",
+    "whitenoise.runserver_nostatic",
 ]
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 
 MIDDLEWARE = [
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -58,7 +61,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # 'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'Ecom_project.urls'
@@ -136,7 +138,13 @@ USE_TZ = True
 STATIC_URL = 'static/'
 STATIC_URL = 'static/'
 STATICFILES_DIRS=['static/']
+
+# whitenoise static stuff
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFileStorage'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+
+
 
 MEDIA_URL='media/'
 MEDIA_ROOT=os.path.join(BASE_DIR,'media')
