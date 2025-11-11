@@ -1,1 +1,1 @@
-web: python manage.py migrate && gunicorn Ecom_project.wsgi
+web: gunicorn Ecom_project.wsgi:application --bind 0.0.0.0:8000
