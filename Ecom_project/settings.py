@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 import os
 from pathlib import Path
 from dotenv import load_dotenv
+import dj_database_url
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -28,9 +29,7 @@ SECRET_KEY = 'django-insecure-vy92&$#@bg^dc-%cne9ozveutir9ctz+o0i^p0ekhtrz7q@_p^
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['djangoecomproject-production-5654.up.railway.app', 'https://djangoecomproject-production-5654.up.railway.app']
-CSRF_TRUSTED_ORIGINS = ['https://djangoecomproject-production-5654.up.railway.app']
-
+ALLOWED_HOSTS = ["*"]
 
 # Application definition
 
@@ -89,15 +88,19 @@ WSGI_APPLICATION = 'Ecom_project.wsgi.application'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysq',
+#         'NAME': os.environ.get('DB_NAME'),
+#         'USER': os.environ.get('DB_USER'),
+#         'PASSWORD': os.environ.get('DB_PASSWORD'),
+#         'HOST': os.environ.get('DB_HOST', '127.0.0.1'),
+#         'PORT': os.environ.get('DB_PORT', '3306'),
+#     }
+# }
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.environ.get('DB_NAME'),
-        'USER': os.environ.get('DB_USER'),
-        'PASSWORD': os.environ.get('DB_PASSWORD'),
-        'HOST': os.environ.get('DB_HOST', '127.0.0.1'),
-        'PORT': os.environ.get('DB_PORT', '3306'),
-    }
+    'default' : dj_database_url.parse(os.environ.get('DATABASE_URL'))
 }
 
 
