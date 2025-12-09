@@ -3,13 +3,11 @@ cffi==1.17.1
 crispy-bootstrap5==2024.2
 cryptography==45.0.0
 cryptograpy==0.0.0
-dj-database-url==3.0.1
 Django==5.1.1
 django-crispy-forms==2.4
-gunicorn==23.0.0
+mysqlclient==2.2.7
 packaging==24.1
 pillow==10.3.0
-psycopg2==2.9.11
 pycparser==2.22
 python-dotenv==1.0.1
 sqlparse==0.5.3
